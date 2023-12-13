@@ -1,47 +1,69 @@
 class MoviesController < ApplicationController
-  def index
-    @movies = Movie.all
-  end
+  before_action :set_ratings, only: [:index, :show]
+
   def show
-    id = params[:id] # retrieve movie ID from URI route
-    @movie = Movie.find(id) # look up movie by unique ID
-    render(:partial => 'movies/partial_show', :object => @movie) if request.xhr?
-    # will render app/views/movies/show.<extension> by default
+    @movie = Movie.find_by(id: params[:id])
+  
+    if @movie.nil?
+      redirect_to action: :index
+      flash[:warning] = "Movie wasn't found"
+    end
   end
+  
+
+  def index
+    @movies = Movie.with_ratings(@selected_ratings)
+
+    if params[:sort_column] == 'title'
+      @movies = @movies.order(:title)
+    elsif params[:sort_column] == 'release_date'
+      @movies = @movies.order(:release_date)
+    end
+  end
+
   def new
-    @movie = Movie.new
-  end 
+    render 'new'
+  end
+
   def create
-    if (@movie = Movie.create(movie_params))
-      redirect_to movies_path, :notice => "#{@movie.title} created."
-    else
-      flash[:alert] = "Movie #{@movie.title} could not be created: " +
-        @movie.errors.full_messages.join(",")
-      render 'new'
-    end
+    @movie = Movie.create!(movie_params)
+    flash[:notice] = "#{@movie.title} was successfully created."
+    redirect_to movies_path
   end
+
   def edit
-    @movie = Movie.find params[:id]
+    @movie = Movie.find(params[:id])
   end
+
   def update
-    @movie = Movie.find params[:id]
-    if (@movie.update_attributes(movie_params))
-      redirect_to movie_path(@movie), :notice => "#{@movie.title} updated."
-    else
-      flash[:alert] = "#{@movie.title} could not be updated: " +
-        @movie.errors.full_messages.join(",")
-      render 'edit'
-    end
+    @movie = Movie.find(params[:id])
+    @movie.update_attributes!(movie_params)
+    flash[:notice] = "#{@movie.title} was successfully updated."
+    redirect_to movie_path(@movie)
   end
+
   def destroy
     @movie = Movie.find(params[:id])
     @movie.destroy
-    redirect_to movies_path, :notice => "#{@movie.title} deleted."
+    flash[:notice] = "Movie '#{@movie.title}' deleted."
+    redirect_to movies_path
   end
+
   private
+
+  def set_ratings
+    @all_ratings = Movie.all_ratings
+    @selected_ratings = params[:ratings] || session[:ratings] || @all_ratings
+    session[:ratings] = @selected_ratings
+  end
+
+  def self.with_ratings(ratings)
+    where(rating: ratings)
+  end
+
   def movie_params
-    params.require(:movie)
-    params[:movie].permit(:title,:rating,:release_date)
+    params.require(:movie).permit(:title, :rating, :description, :release_date)
   end
 end
+
 

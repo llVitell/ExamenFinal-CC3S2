@@ -146,14 +146,35 @@ Antes de empezar esta parte primero añadimos la gema faraday en nuestro archivo
 
 ![](imagenes/16.png)
 
+- Generador de rspec para rails 
+
+![](imagenes/17.png)
+
+- Añadimos byebug en nuestro archivo rails_helper.rb dentro de la carpeta spec generada previamente
+
+![](imagenes/18.png)
+
+- También configuramos los archivos para guard, creamos el archivo guardfile
+
+![](imagenes/19.png)
+
+- Corremos el servidor para verificar que todo esté correcto
+
+![](imagenes/20.png)
+
 ***
 
 ## Paso 1: Escribiendo una nueva vista
 
 Como primer paso, ampliarás RottenPotatoes con un formulario que permita al usuario buscar en The Open Movie Database (TMDb) una película para agregar a RottenPotatoes. 
 
+## Respuestas del Paso 1
 
+Como estamos en la arquitectura MVC para añadir el formulario debemos crear tanto una vista como un controlador.
 
+- Creamos la vista en app/views así como el controlador dentro de app/controllers y por último definimos la ruta en config/routes. Este sería el resultado
+
+![](imagenes/21.png)
 
 ***
 

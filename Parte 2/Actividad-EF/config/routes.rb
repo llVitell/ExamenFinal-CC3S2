@@ -1,7 +1,7 @@
-Myrottenpotatoes::Application.routes.draw do
-  #resources :movies
-  resources :movies do
-  resources :reviews
-end
-  root :to => redirect('/movies')
+Rails.application.routes.draw do
+  # Otras rutas...
+  resources :search
+
+  # La ruta principal se coloca al final
+  root 'search#index'
 end

@@ -10,31 +10,19 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_12_13_011425) do
-  create_table "moviegoers", force: :cascade do |t|
-    t.string "name"
-    t.string "provider"
-    t.string "uid"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
+ActiveRecord::Schema[7.0].define(version: 2023_12_05_165047) do
   create_table "movies", force: :cascade do |t|
     t.string "title"
     t.string "rating"
     t.text "description"
-    t.datetime "release_date", precision: nil
-    t.datetime "created_at", precision: nil, null: false
-    t.datetime "updated_at", precision: nil, null: false
+    t.datetime "release_date"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
-  create_table "reviews", force: :cascade do |t|
-    t.integer "potatoes"
-    t.text "comments"
-    t.integer "moviegoer_id"
-    t.integer "movie_id"
-    t.index ["movie_id"], name: "index_reviews_on_movie_id"
-    t.index ["moviegoer_id"], name: "index_reviews_on_moviegoer_id"
+  create_table "users", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
 end
